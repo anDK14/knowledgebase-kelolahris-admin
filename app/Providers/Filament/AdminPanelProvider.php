@@ -43,7 +43,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -66,7 +65,7 @@ class AdminPanelProvider extends PanelProvider
                 ->navigationLabel('Role')
                 ->navigationIcon('heroicon-o-shield-check')
                 ->activeNavigationIcon('heroicon-s-shield-check')
-                ->navigationGroup('Other')
+                ->navigationGroup('Lainnya')
                 ->navigationSort(3)
                 ->navigationBadge(fn () => Role::count())
                 ->navigationBadgeColor('info')
