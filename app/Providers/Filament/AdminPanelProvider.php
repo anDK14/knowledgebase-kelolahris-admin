@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->globalSearch(false)
             ->plugins([
             FilamentShieldPlugin::make()
                 ->navigationLabel('Role')
