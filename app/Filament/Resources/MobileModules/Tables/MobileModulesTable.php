@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 
 class MobileModulesTable
@@ -19,40 +20,62 @@ class MobileModulesTable
                     ->label('ID')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('name')
-                    ->label('Nama Modul Mobile')
+                    ->label('Nama Modul')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->weight('semibold')
+                    ->color('secondary')
+                    ->size('lg'),
 
                 TextColumn::make('description')
                     ->label('Deskripsi')
                     ->limit(50)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->size('sm'),
+
+                IconColumn::make('has_features')
+                    ->label('Fitur')
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->color('secondary')
+                    ->tooltip('Memiliki fitur terkait')
+                    ->alignCenter(),
             ])
             ->filters([
                 SelectFilter::make('name')
-                ->label('Nama Mobile Module')
-                ->options(function () {
-                    return \App\Models\MobileModule::query()
-                    ->pluck('name', 'name')
-                    ->toArray();
-                })
-                ->searchable()
-                ->preload(),
+                    ->label('Filter by Modul')
+                    ->options(function () {
+                        return \App\Models\MobileModule::query()
+                            ->pluck('name', 'name')
+                            ->toArray();
+                    })
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Semua Modul'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->color('primary')
+                    ->icon('heroicon-o-pencil'),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->color('danger')
+                        ->icon('heroicon-o-trash'),
                 ]),
             ])
-            ->recordUrl(null);
+            ->recordUrl(null)
+            ->striped()
+            ->deferLoading();
     }
 }

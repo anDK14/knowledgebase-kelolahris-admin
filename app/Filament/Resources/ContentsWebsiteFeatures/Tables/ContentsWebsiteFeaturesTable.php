@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 
 class ContentsWebsiteFeaturesTable
@@ -19,78 +20,124 @@ class ContentsWebsiteFeaturesTable
                     ->label('ID')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('submodule.id')
-                    ->label('Website Feature ID')
+                    ->label('ID Fitur')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No Module')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('submodule.name')
-                    ->label('Website Feature Name')
+                    ->label('Nama Fitur')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No Module'),
+                    ->placeholder('Tidak ada fitur')
+                    ->weight('semibold')
+                    ->color('primary')
+                    ->size('lg'),
 
-                TextColumn::make('content_type')
-                    ->label('Content Type')
+                BadgeColumn::make('content_type')
+                    ->label('Tipe Konten')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function ($state) {
+                        return match($state) {
+                            'fitur_utama' => 'Fitur Utama',
+                            'panduan_langkah' => 'Panduan Langkah',
+                            'contoh_tampilan' => 'Contoh Tampilan',
+                            'tip_box' => 'Tip Box',
+                            default => $state
+                        };
+                    })
+                    ->colors([
+                        'primary' => 'fitur_utama',
+                        'secondary' => 'panduan_langkah',
+                        'success' => 'contoh_tampilan', 
+                        'warning' => 'tip_box',
+                    ])
+                    ->icons([
+                        'heroicon-o-star' => 'fitur_utama',
+                        'heroicon-o-document-text' => 'panduan_langkah',
+                        'heroicon-o-photo' => 'contoh_tampilan',
+                        'heroicon-o-light-bulb' => 'tip_box',
+                    ]),
 
                 TextColumn::make('content_order')
-                    ->label('Order')
+                    ->label('Urutan')
                     ->sortable()
-                    ->alignCenter(),
-                
+                    ->alignCenter()
+                    ->weight('bold')
+                    ->color('secondary'),
+
                 TextColumn::make('title')
-                    ->label('Title')
+                    ->label('Judul')
                     ->limit(50)
-                    ->searchable(),
-                
+                    ->searchable()
+                    ->weight('medium'),
+
                 TextColumn::make('description')
-                    ->label('Description')
+                    ->label('Deskripsi')
                     ->limit(50)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
-                
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->size('sm'),
+
                 TextColumn::make('image_path')
-                    ->label('Image')
-                    ->limit(50)
+                    ->label('Gambar')
+                    ->limit(30)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->placeholder('Tidak ada gambar')
+                    ->size('sm'),
             ])
             ->filters([
                 SelectFilter::make('submodule.name')
-                    ->label('Website Feature Name')
+                    ->label('Nama Fitur')
                     ->searchable()
                     ->preload()
-                    ->relationship('submodule', 'name'),
+                    ->relationship('submodule', 'name')
+                    ->placeholder('Semua Fitur'),
 
                 SelectFilter::make('content_type')
-                    ->label('Content Type')
+                    ->label('Tipe Konten')
                     ->options([
                         'fitur_utama' => 'Fitur Utama',
                         'panduan_langkah' => 'Panduan Langkah',
-                        'contoh_tampilan' => 'Contoh Tampilan',
+                        'contoh_tampilan' => 'Contoh Tampilan', 
                         'tip_box' => 'Tip Box',
                     ])
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->placeholder('Semua Tipe'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->color('primary')
+                    ->icon('heroicon-o-pencil'),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->color('danger')
+                        ->icon('heroicon-o-trash'),
                 ]),
             ])
-            ->recordUrl(null);
+            ->recordUrl(null)
+            ->striped()
+            ->deferLoading();
     }
 }

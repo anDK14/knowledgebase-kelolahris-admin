@@ -25,57 +25,70 @@ class FaqsTable
                     ->label('ID')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray'),
 
                 TextColumn::make('submodule_id')
                     ->label('ID Website Feature')
                     ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->placeholder('Tidak ada di website feature'),
+                    ->placeholder('—')
+                    ->color('gray'),
 
                 TextColumn::make('submodule.name')
-                    ->label('Nama Website Feature')
+                    ->label('Website Feature')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('Tidak ada di website feature'),
-                
+                    ->placeholder('—')
+                    ->color('primary')
+                    ->weight('medium'),
+
                 TextColumn::make('mobile_feature_id')
                     ->label('ID Mobile Feature')
                     ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->placeholder('Tidak ada di mobile feature'),
+                    ->placeholder('—')
+                    ->color('gray'),
 
                 TextColumn::make('mobileFeature.name')
-                    ->label('Nama Mobile Feature')
+                    ->label('Mobile Feature')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('Tidak ada di mobile feature'),
+                    ->placeholder('—')
+                    ->color('secondary')
+                    ->weight('medium'),
 
                 TextColumn::make('question')
                     ->label('Pertanyaan')
                     ->limit(50)
                     ->searchable()
-                    ->tooltip(fn (TextColumn $column) => $column->getState()),
+                    ->weight('semibold')
+                    ->tooltip(fn (TextColumn $column) => $column->getState() ?: null),
 
                 TextColumn::make('answer')
                     ->label('Jawaban')
                     ->limit(50)
                     ->searchable()
-                    ->tooltip(fn (TextColumn $column) => $column->getState()),
+                    ->color('gray')
+                    ->tooltip(fn (TextColumn $column) => $column->getState() ?: null),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('updated_at')
                     ->label('Diupdate Pada')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
             ])
             ->filters([
                 TernaryFilter::make('feature_type')
@@ -90,22 +103,23 @@ class FaqsTable
                     ),
 
                 SelectFilter::make('submodule')
-                    ->label('Nama Website Feature')
+                    ->label('Website Feature')
                     ->searchable()
                     ->preload()
                     ->relationship('submodule', 'name'),
 
                 SelectFilter::make('mobileFeature')
-                    ->label('Nama Mobile Feature')
+                    ->label('Mobile Feature')
                     ->searchable()
                     ->preload()
                     ->relationship('mobileFeature', 'name'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->color('primary')
+                    ->icon('heroicon-o-pencil'),
             ])
             ->toolbarActions([
-                // Tombol Ekspor PDF selalu muncul
                 Action::make('exportPdf')
                     ->label('Ekspor PDF')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -147,11 +161,14 @@ class FaqsTable
                         );
                     }),
 
-                // Bulk delete tetap ada
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->color('danger')
+                        ->icon('heroicon-o-trash'),
                 ]),
             ])
-            ->recordUrl(null);
+            ->recordUrl(null)
+            ->striped()
+            ->deferLoading();
     }
 }

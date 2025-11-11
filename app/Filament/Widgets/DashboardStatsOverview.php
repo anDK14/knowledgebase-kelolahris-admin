@@ -16,36 +16,49 @@ class DashboardStatsOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Users', User::count())
-                ->description('Jumlah pengguna terdaftar')
-                ->descriptionIcon('heroicon-m-users')
-                ->color('success')
-                ->chart([7, 2, 10, 3, 15, 4, 17]),
+            // Users & FAQ - Primary Colors
+            Stat::make('Total Pengguna', User::count())
+                ->description('Pengguna terdaftar')
+                ->descriptionIcon('heroicon-m-user-group')
+                ->color('primary')
+                ->url(route('filament.admin.resources.users.index')),
 
-            Stat::make('Website Modules', WebsiteModule::count())
-                ->description('Modul website tersedia')
-                ->descriptionIcon('heroicon-m-computer-desktop')
-                ->color('primary'),
+            Stat::make('FAQ', Faq::count())
+                ->description('Pertanyaan umum')
+                ->descriptionIcon('heroicon-m-chat-bubble-left-ellipsis')
+                ->color('primary')
+                ->url(route('filament.admin.resources.faqs.index')),
 
-            Stat::make('Website Features', WebsiteFeature::count())
-                ->description('Fitur website tersedia')
+            // Website - Primary Colors
+            Stat::make('Modul Website', WebsiteModule::count())
+                ->description('Modul tersedia')
+                ->descriptionIcon('heroicon-m-globe-alt')
+                ->color('primary')
+                ->url(route('filament.admin.resources.website-modules.index')),
+
+            Stat::make('Fitur Website', WebsiteFeature::count())
+                ->description('Fitur website')
                 ->descriptionIcon('heroicon-m-cog')
-                ->color('info'),
+                ->color('primary')
+                ->url(route('filament.admin.resources.website-features.index')),
 
-            Stat::make('Mobile Modules', MobileModule::count())
-                ->description('Modul mobile tersedia')
+            // Mobile - Secondary Colors
+            Stat::make('Modul Mobile', MobileModule::count())
+                ->description('Modul mobile')
                 ->descriptionIcon('heroicon-m-device-phone-mobile')
-                ->color('warning'),
+                ->color('secondary')
+                ->url(route('filament.admin.resources.mobile-modules.index')),
 
-            Stat::make('Mobile Features', MobileFeature::count())
-                ->description('Fitur mobile tersedia')
+            Stat::make('Fitur Mobile', MobileFeature::count())
+                ->description('Fitur mobile')
                 ->descriptionIcon('heroicon-m-bolt')
-                ->color('danger'),
-
-            Stat::make('FAQ Items', Faq::count())
-                ->description('Pertanyaan yang sering diajukan')
-                ->descriptionIcon('heroicon-m-question-mark-circle')
-                ->color('gray'),
+                ->color('secondary')
+                ->url(route('filament.admin.resources.mobile-features.index')),
         ];
+    }
+
+    public function getColumns(): int
+    {
+        return 3;
     }
 }

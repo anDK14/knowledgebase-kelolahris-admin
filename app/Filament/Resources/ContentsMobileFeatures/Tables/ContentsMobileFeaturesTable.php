@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 
 class ContentsMobileFeaturesTable
@@ -19,61 +20,97 @@ class ContentsMobileFeaturesTable
                     ->label('ID')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('mobilefeature.id')
-                    ->label('ID Mobile Feature')
+                    ->label('ID Fitur')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No Module')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('mobilefeature.name')
-                    ->label('Nama Mobile Feature')
+                    ->label('Nama Fitur')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No Module'),
+                    ->placeholder('-')
+                    ->weight('semibold')
+                    ->color('secondary')
+                    ->size('lg'),
 
-                TextColumn::make('content_type')
+                BadgeColumn::make('content_type')
                     ->label('Tipe Konten')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'fitur_utama' => 'Fitur Utama',
+                            'panduan_langkah' => 'Panduan Langkah',
+                            'contoh_tampilan' => 'Contoh Tampilan',
+                            'tip_box' => 'Tip Box',
+                            default => $state
+                        };
+                    })
+                    ->colors([
+                        'primary' => 'fitur_utama',
+                        'secondary' => 'panduan_langkah',
+                        'success' => 'contoh_tampilan',
+                        'warning' => 'tip_box',
+                    ])
+                    ->icons([
+                        'heroicon-o-star' => 'fitur_utama',
+                        'heroicon-o-document-text' => 'panduan_langkah',
+                        'heroicon-o-photo' => 'contoh_tampilan',
+                        'heroicon-o-light-bulb' => 'tip_box',
+                    ]),
 
                 TextColumn::make('content_order')
                     ->label('Urutan')
                     ->sortable()
-                    ->alignCenter(),
-                
+                    ->alignCenter()
+                    ->weight('bold')
+                    ->color('secondary'),
+
                 TextColumn::make('title')
                     ->label('Judul')
                     ->limit(50)
-                    ->searchable(),
-                
+                    ->searchable()
+                    ->weight('medium'),
+
                 TextColumn::make('description')
                     ->label('Deskripsi')
                     ->limit(50)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('image_path')
-                    ->label('Image Path')
-                    ->limit(50)
+                    ->label('Gambar')
+                    ->limit(30)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->placeholder('Tidak ada gambar')
+                    ->size('sm'),
             ])
             ->filters([
-                // Filter untuk Mobile Feature Name
                 SelectFilter::make('mobilefeature.name')
-                    ->label('Nama Mobile Feature')
+                    ->label('Nama Fitur')
                     ->searchable()
                     ->preload()
                     ->relationship('mobilefeature', 'name'),
-                
-                // Filter untuk Content Type
+
                 SelectFilter::make('content_type')
                     ->label('Tipe Konten')
                     ->options([
@@ -86,13 +123,17 @@ class ContentsMobileFeaturesTable
                     ->preload(),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->color('primary'),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->color('danger'),
                 ]),
             ])
-            ->recordUrl(null);
+            ->recordUrl(null)
+            ->striped()
+            ->deferLoading();
     }
 }

@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 
 class MobileFeaturesTable
@@ -19,61 +20,78 @@ class MobileFeaturesTable
                     ->label('ID')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray')
+                    ->size('sm'),
 
                 TextColumn::make('name')
-                    ->label('Nama Mobile Feature')
+                    ->label('Nama Fitur')
                     ->sortable()
-                    ->searchable(),
-                
+                    ->searchable()
+                    ->weight('semibold')
+                    ->color('secondary')
+                    ->size('lg'),
+
                 TextColumn::make('description')
                     ->label('Deskripsi')
                     ->limit(50)
                     ->searchable()
                     ->tooltip(function (TextColumn $column): ?string {
-                        return $column->getState();
-                    }),
-
-                TextColumn::make('view_count')
-                    ->label('View Count')
+                        $state = $column->getState();
+                        return $state ?: null;
+                    })
+                    ->color('gray')
+                    ->size('sm'),
+                
+                BadgeColumn::make('view_count')
+                    ->label('Dilihat')
                     ->sortable()
-                    ->searchable()
-                    ->numeric(),
-
-                TextColumn::make('mobilemodule.id')
-                    ->label('ID Mobile Module')
-                    ->sortable()
-                    ->searchable()
-                    ->placeholder('No Module')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->numeric()
+                    ->colors([
+                        'secondary' => fn($state) => $state > 0,
+                        'gray' => fn($state) => $state == 0,
+                    ])
+                    ->icons([
+                        'heroicon-o-eye' => fn($state) => $state > 0,
+                        'heroicon-o-eye-slash' => fn($state) => $state == 0,
+                    ]),
 
                 TextColumn::make('mobilemodule.name')
-                    ->label('Nama Mobile Module')
+                    ->label('Modul')
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No Module')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->placeholder('Tidak ada modul')
+                    ->color('secondary')
+                    ->weight('medium'),
 
+                TextColumn::make('mobilemodule.id')
+                    ->label('ID Modul')
+                    ->sortable()
+                    ->searchable()
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->color('gray'),
             ])
             ->filters([
-                SelectFilter::make('name')
-                ->label('Nama Website Feature')
-                ->options(function () {
-                    return \App\Models\WebsiteFeature::query()
-                    ->pluck('name', 'name')
-                    ->toArray();
-                })
-                ->searchable()
-                ->preload(),
+                SelectFilter::make('mobilemodule.name')
+                    ->label('Filter by Modul')
+                    ->relationship('mobilemodule', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Semua Modul'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->color('primary'),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->color('danger'),
                 ]),
             ])
-            ->recordUrl(null);
+            ->recordUrl(null)
+            ->striped()
+            ->deferLoading();
     }
 }
