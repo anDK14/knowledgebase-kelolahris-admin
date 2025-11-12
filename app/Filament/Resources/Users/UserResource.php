@@ -20,9 +20,9 @@ class UserResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = 'Akun';
-    protected static ?string $modelLabel = 'Akun';
-    protected static ?string $pluralModelLabel = 'Akun';
+    protected static ?string $navigationLabel = 'User';
+    protected static ?string $modelLabel = 'User';
+    protected static ?string $pluralModelLabel = 'Daftar User';
 
     public static function getNavigationGroup(): ?string
     {

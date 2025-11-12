@@ -30,6 +30,18 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->renderHook(
+                'panels::head.start',
+                fn() => '<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const originalTitle = document.title;
+            if (originalTitle.includes(" - ")) {
+                const parts = originalTitle.split(" - ");
+                document.title = parts[1] + " | " + parts[0];
+            }
+        });
+    </script>'
+            )
             ->font('Poppins')
             ->darkMode(false)
             ->brandLogo('https://www.kelolahr.id/wp-content/uploads/2023/09/new-logo-khr.png')

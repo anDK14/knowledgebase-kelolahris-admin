@@ -20,9 +20,9 @@ class ContentsWebsiteFeatureResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $navigationLabel = 'Konten Website Feature';
-    protected static ?string $modelLabel = 'Konten Website Feature';
-    protected static ?string $pluralModelLabel = 'Konten Website Feature';
+    protected static ?string $navigationLabel = 'Konten Fitur Website';
+    protected static ?string $modelLabel = 'Konten Fitur Website';
+    protected static ?string $pluralModelLabel = 'Konten Fitur Website';
 
     public static function getNavigationGroup(): ?string
     {

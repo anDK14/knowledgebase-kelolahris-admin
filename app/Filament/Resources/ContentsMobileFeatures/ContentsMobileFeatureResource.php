@@ -20,9 +20,9 @@ class ContentsMobileFeatureResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $navigationLabel = 'Konten Mobile Feature';
-    protected static ?string $modelLabel = 'Konten Mobile Feature';
-    protected static ?string $pluralModelLabel = 'Konten Mobile Feature';
+    protected static ?string $navigationLabel = 'Konten Fitur Mobile';
+    protected static ?string $modelLabel = 'Konten Fitur Mobile';
+    protected static ?string $pluralModelLabel = 'Konten Fitur Mobile';
 
     public static function getNavigationGroup(): ?string
     {
