@@ -3,7 +3,7 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
@@ -31,4 +31,4 @@
     .fi-fo-field-wrp-label span {
         @apply text-gray-900;
     }
-}
+} */
