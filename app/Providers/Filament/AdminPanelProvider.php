@@ -43,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
     </script>'
             )
             ->font('Poppins')
+            ->viteTheme('resources/css/filament/admin/login.css')
             ->darkMode(false)
             ->brandName('Knowledge Base KelolaHR')
             ->brandLogo(asset('https://www.kelolahr.id/wp-content/uploads/2023/09/new-logo-khr.png'))
