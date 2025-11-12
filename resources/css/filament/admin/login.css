@@ -10,14 +10,14 @@
 
 .fi-simple-main-ctn {
     @apply justify-end 
-           bg-white; /* Mengubah background menjadi putih dan menghapus background image */
+           bg-white;
 }
 
 .fi-simple-main {
     @apply rounded-none 
            h-screen 
            m-0 
-           bg-white /* Mengubah dari orange-950 menjadi white */
+           bg-white
            flex 
            justify-center 
            items-center;
@@ -29,6 +29,6 @@
     .fi-logo,
     h1,
     .fi-fo-field-wrp-label span {
-        @apply text-gray-900; /* Mengubah text color menjadi gelap agar terbaca di background putih */
+        @apply text-gray-900;
     }
 }
