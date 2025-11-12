@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarFullyCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\CustomLogin::class)
             ->renderHook(
                 'panels::head.start',
                 fn() => '<script>
@@ -44,8 +44,10 @@ class AdminPanelProvider extends PanelProvider
             )
             ->font('Poppins')
             ->darkMode(false)
-            ->brandLogo('https://www.kelolahr.id/wp-content/uploads/2023/09/new-logo-khr.png')
-            ->brandLogoHeight('2rem')
+            ->brandName('Knowledge Base KelolaHR')
+            ->brandLogo(asset('https://www.kelolahr.id/wp-content/uploads/2023/09/new-logo-khr.png'))
+            ->brandLogoHeight('2.5rem')
+            ->favicon(asset('https://play-lh.googleusercontent.com/Zo06LmwO3b3uh9h7W-GycTOkz12hlqP2wlTg0A1gpo26ffb2_SPHLiWSnqBpHP9fe7s'))
             ->colors([
                 'primary' => [
                     50  => '#E6F2F1',
